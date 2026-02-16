@@ -8,6 +8,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import Dashboard from "./pages/Dashboard";
 import Vehicles from "./pages/Vehicles";
 import Settings from "./pages/Settings";
+import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import AppLayout from "./components/layout/AppLayout";
@@ -26,6 +27,7 @@ const App = () => (
             <Route element={<SidebarProvider><AppLayout /></SidebarProvider>}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/vehicles" element={<Vehicles />} />
+              <Route path="/profile" element={<Profile />} />
               <Route path="/settings" element={<Settings />} />
             </Route>
             <Route path="*" element={<NotFound />} />

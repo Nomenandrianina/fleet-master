@@ -1,4 +1,4 @@
-import { LayoutDashboard, Car, Fuel, AlertTriangle, Wrench, BarChart3, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, Car, Settings, LogOut, UserCircle } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import {
@@ -20,6 +20,7 @@ export function AppSidebar() {
   const menuItems = [
     { title: t.nav.dashboard, url: '/', icon: LayoutDashboard },
     { title: t.nav.vehicles, url: '/vehicles', icon: Car },
+    { title: t.profile.title, url: '/profile', icon: UserCircle },
     { title: t.nav.settings, url: '/settings', icon: Settings },
   ];
 

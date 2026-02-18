@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { User, Mail, Phone, Building2, MapPin, Shield, Camera, Save, X, Pencil } from 'lucide-react';
+import { User, Mail, Phone, Building2, MapPin, Shield, Camera, Save, X, Pencil, Lock } from 'lucide-react';
 import { toast } from '@/components/ui/sonner';
+import { Loader } from '@/components/ui/loader';
 
 interface UserProfile {
   firstName: string;
@@ -31,14 +33,30 @@ const defaultProfile: UserProfile = {
   country: 'Maroc',
 };
 
+const ProfileField = ({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) => (
+  <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
+    <div className="mt-0.5 text-muted-foreground">{icon}</div>
+    <div>
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className="font-medium text-foreground">{value}</p>
+    </div>
+  </div>
+);
+
 const Profile = () => {
   const { t } = useLanguage();
+  const { updatePassword, user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState<UserProfile>(() => {
     const saved = localStorage.getItem('fleet-profile');
     return saved ? JSON.parse(saved) : defaultProfile;
   });
   const [editForm, setEditForm] = useState<UserProfile>(profile);
+
+  // Password change state
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [passwordLoading, setPasswordLoading] = useState(false);
 
   const handleSave = () => {
     setProfile(editForm);
@@ -50,6 +68,28 @@ const Profile = () => {
   const handleCancel = () => {
     setEditForm(profile);
     setIsEditing(false);
+  };
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newPassword.length < 6) {
+      toast.error(t.profile.passwordTooShort);
+      return;
+    }
+    if (newPassword !== confirmNewPassword) {
+      toast.error(t.profile.passwordMismatch);
+      return;
+    }
+    setPasswordLoading(true);
+    const { error } = await updatePassword(newPassword);
+    setPasswordLoading(false);
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success(t.profile.passwordChanged);
+      setNewPassword('');
+      setConfirmNewPassword('');
+    }
   };
 
   const initials = `${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}`;
@@ -97,6 +137,9 @@ const Profile = () => {
                 <Building2 className="w-4 h-4" />
                 {profile.company}
               </p>
+              {user?.email && (
+                <p className="text-xs text-muted-foreground mt-2">{user.email}</p>
+              )}
             </div>
           </div>
         </CardContent>
@@ -116,86 +159,46 @@ const Profile = () => {
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">{t.profile.firstName}</Label>
-                  <Input
-                    id="firstName"
-                    value={editForm.firstName}
-                    onChange={(e) => setEditForm({ ...editForm, firstName: e.target.value })}
-                  />
+                  <Input id="firstName" value={editForm.firstName} onChange={(e) => setEditForm({ ...editForm, firstName: e.target.value })} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName">{t.profile.lastName}</Label>
-                  <Input
-                    id="lastName"
-                    value={editForm.lastName}
-                    onChange={(e) => setEditForm({ ...editForm, lastName: e.target.value })}
-                  />
+                  <Input id="lastName" value={editForm.lastName} onChange={(e) => setEditForm({ ...editForm, lastName: e.target.value })} />
                 </div>
               </div>
-
               <Separator />
-
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="email">{t.profile.email}</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={editForm.email}
-                    onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                  />
+                  <Input id="email" type="email" value={editForm.email} onChange={(e) => setEditForm({ ...editForm, email: e.target.value })} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phone">{t.profile.phone}</Label>
-                  <Input
-                    id="phone"
-                    value={editForm.phone}
-                    onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                  />
+                  <Input id="phone" value={editForm.phone} onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })} />
                 </div>
               </div>
-
               <Separator />
-
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="company">{t.profile.company}</Label>
-                  <Input
-                    id="company"
-                    value={editForm.company}
-                    onChange={(e) => setEditForm({ ...editForm, company: e.target.value })}
-                  />
+                  <Input id="company" value={editForm.company} onChange={(e) => setEditForm({ ...editForm, company: e.target.value })} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="role">{t.profile.role}</Label>
-                  <Input
-                    id="role"
-                    value={editForm.role}
-                    onChange={(e) => setEditForm({ ...editForm, role: e.target.value })}
-                  />
+                  <Input id="role" value={editForm.role} onChange={(e) => setEditForm({ ...editForm, role: e.target.value })} />
                 </div>
               </div>
-
               <Separator />
-
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="city">{t.profile.city}</Label>
-                  <Input
-                    id="city"
-                    value={editForm.city}
-                    onChange={(e) => setEditForm({ ...editForm, city: e.target.value })}
-                  />
+                  <Input id="city" value={editForm.city} onChange={(e) => setEditForm({ ...editForm, city: e.target.value })} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="country">{t.profile.country}</Label>
-                  <Input
-                    id="country"
-                    value={editForm.country}
-                    onChange={(e) => setEditForm({ ...editForm, country: e.target.value })}
-                  />
+                  <Input id="country" value={editForm.country} onChange={(e) => setEditForm({ ...editForm, country: e.target.value })} />
                 </div>
               </div>
-
               <div className="flex justify-end gap-3 pt-4">
                 <Button variant="outline" onClick={handleCancel} className="gap-2">
                   <X className="w-4 h-4" />
@@ -221,18 +224,33 @@ const Profile = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Password Change */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Lock className="w-5 h-5" />
+            {t.profile.security}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handlePasswordChange} className="space-y-4 max-w-md">
+            <div className="space-y-2">
+              <Label htmlFor="newPassword">{t.profile.newPassword}</Label>
+              <Input id="newPassword" type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="••••••••" required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirmNewPassword">{t.profile.confirmNewPassword}</Label>
+              <Input id="confirmNewPassword" type="password" value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)} placeholder="••••••••" required />
+            </div>
+            <Button type="submit" disabled={passwordLoading} className="gap-2">
+              {passwordLoading ? <Loader size="sm" /> : <><Lock className="w-4 h-4" />{t.profile.changePassword}</>}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 };
-
-const ProfileField = ({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) => (
-  <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
-    <div className="mt-0.5 text-muted-foreground">{icon}</div>
-    <div>
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className="font-medium text-foreground">{value}</p>
-    </div>
-  </div>
-);
 
 export default Profile;

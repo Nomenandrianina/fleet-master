@@ -180,6 +180,17 @@ export const translations = {
       forgotPassword: 'Mot de passe oublié ?',
       signIn: 'Se connecter',
       demoAccess: 'Accès démo',
+      noAccount: 'Pas encore de compte ?',
+    },
+    // Register
+    register: {
+      subtitle: 'Créer un nouveau compte',
+      confirmPassword: 'Confirmer le mot de passe',
+      createAccount: 'Créer un compte',
+      alreadyHaveAccount: 'Déjà un compte ?',
+      passwordMismatch: 'Les mots de passe ne correspondent pas',
+      passwordTooShort: 'Le mot de passe doit contenir au moins 6 caractères',
+      checkEmail: 'Vérifiez votre email pour confirmer votre compte',
     },
     // Profile
     profile: {
@@ -195,6 +206,14 @@ export const translations = {
       city: 'Ville',
       country: 'Pays',
       saveSuccess: 'Profil mis à jour avec succès',
+      changePassword: 'Changer le mot de passe',
+      currentPassword: 'Mot de passe actuel',
+      newPassword: 'Nouveau mot de passe',
+      confirmNewPassword: 'Confirmer le nouveau mot de passe',
+      passwordChanged: 'Mot de passe modifié avec succès',
+      passwordMismatch: 'Les mots de passe ne correspondent pas',
+      passwordTooShort: 'Le mot de passe doit contenir au moins 6 caractères',
+      security: 'Sécurité',
     },
     // Settings
     settings: {
@@ -390,6 +409,17 @@ export const translations = {
       forgotPassword: 'Forgot password?',
       signIn: 'Sign in',
       demoAccess: 'Demo access',
+      noAccount: "Don't have an account?",
+    },
+    // Register
+    register: {
+      subtitle: 'Create a new account',
+      confirmPassword: 'Confirm password',
+      createAccount: 'Create account',
+      alreadyHaveAccount: 'Already have an account?',
+      passwordMismatch: 'Passwords do not match',
+      passwordTooShort: 'Password must be at least 6 characters',
+      checkEmail: 'Check your email to confirm your account',
     },
     // Profile
     profile: {
@@ -405,6 +435,14 @@ export const translations = {
       city: 'City',
       country: 'Country',
       saveSuccess: 'Profile updated successfully',
+      changePassword: 'Change password',
+      currentPassword: 'Current password',
+      newPassword: 'New password',
+      confirmNewPassword: 'Confirm new password',
+      passwordChanged: 'Password changed successfully',
+      passwordMismatch: 'Passwords do not match',
+      passwordTooShort: 'Password must be at least 6 characters',
+      security: 'Security',
     },
     // Settings
     settings: {

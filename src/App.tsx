@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import Vehicles from "./pages/Vehicles";
 import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
+import Users from "./pages/Users";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
@@ -41,6 +42,7 @@ const AppRoutes = () => (
       <Route path="/vehicles" element={<Vehicles />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/settings" element={<Settings />} />
+      <Route path="/users" element={<Users />} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>

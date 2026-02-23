@@ -1,7 +1,8 @@
-import { LayoutDashboard, Car, Settings, LogOut, UserCircle } from 'lucide-react';
+import { LayoutDashboard, Car, Settings, LogOut, UserCircle, Users, ChevronDown } from 'lucide-react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { useState } from 'react';
 import {
   Sidebar,
   SidebarContent,
@@ -13,12 +14,20 @@ import {
   SidebarHeader,
   SidebarFooter,
 } from '@/components/ui/sidebar';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 
 export function AppSidebar() {
   const { t } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
   const { signOut } = useAuth();
+  const [adminOpen, setAdminOpen] = useState(
+    location.pathname === '/users'
+  );
 
   const handleLogout = async () => {
     await signOut();
@@ -30,6 +39,10 @@ export function AppSidebar() {
     { title: t.nav.vehicles, url: '/vehicles', icon: Car },
     { title: t.profile.title, url: '/profile', icon: UserCircle },
     { title: t.nav.settings, url: '/settings', icon: Settings },
+  ];
+
+  const adminSubItems = [
+    { title: t.users.title, url: '/users', icon: Users },
   ];
 
   return (
@@ -64,6 +77,39 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+
+              {/* Admin submenu */}
+              <SidebarMenuItem>
+                <Collapsible open={adminOpen} onOpenChange={setAdminOpen}>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton className="w-full justify-between">
+                      <div className="flex items-center gap-3 px-3 py-2">
+                        <Settings className="w-5 h-5" />
+                        <span>{t.users.permissions}</span>
+                      </div>
+                      <ChevronDown className={`w-4 h-4 transition-transform ${adminOpen ? 'rotate-180' : ''}`} />
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenu className="pl-4">
+                      {adminSubItems.map((item) => (
+                        <SidebarMenuItem key={item.title}>
+                          <SidebarMenuButton
+                            asChild
+                            isActive={location.pathname === item.url}
+                            className="w-full"
+                          >
+                            <NavLink to={item.url} className="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors">
+                              <item.icon className="w-5 h-5" />
+                              <span>{item.title}</span>
+                            </NavLink>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      ))}
+                    </SidebarMenu>
+                  </CollapsibleContent>
+                </Collapsible>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

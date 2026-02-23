@@ -215,6 +215,23 @@ export const translations = {
       passwordTooShort: 'Le mot de passe doit contenir au moins 6 caractères',
       security: 'Sécurité',
     },
+    // Users
+    users: {
+      title: 'Utilisateurs',
+      subtitle: 'Gérer les utilisateurs et leurs rôles',
+      totalUsers: 'Total utilisateurs',
+      admins: 'Administrateurs',
+      standardUsers: 'Utilisateurs standard',
+      userList: 'Liste des utilisateurs',
+      name: 'Nom',
+      email: 'Email',
+      company: 'Entreprise',
+      role: 'Rôle',
+      joinDate: "Date d'inscription",
+      admin: 'Administrateur',
+      user: 'Utilisateur',
+      permissions: 'Permissions',
+    },
     // Settings
     settings: {
       title: 'Paramètres',
@@ -443,6 +460,23 @@ export const translations = {
       passwordMismatch: 'Passwords do not match',
       passwordTooShort: 'Password must be at least 6 characters',
       security: 'Security',
+    },
+    // Users
+    users: {
+      title: 'Users',
+      subtitle: 'Manage users and their roles',
+      totalUsers: 'Total users',
+      admins: 'Administrators',
+      standardUsers: 'Standard users',
+      userList: 'User list',
+      name: 'Name',
+      email: 'Email',
+      company: 'Company',
+      role: 'Role',
+      joinDate: 'Join date',
+      admin: 'Administrator',
+      user: 'User',
+      permissions: 'Permissions',
     },
     // Settings
     settings: {

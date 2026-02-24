@@ -252,6 +252,25 @@ export const translations = {
       delete: 'Supprimer',
       close: 'Fermer',
     },
+    // Permissions
+    perms: {
+      title: 'Permissions',
+      subtitle: 'Consulter les permissions et leurs modules associés',
+      permName: 'Nom',
+      description: 'Description',
+      type: 'Type',
+      modulesCount: 'Modules',
+      createdAt: 'Date de création',
+      actions: 'Actions',
+      editPerm: 'Détail de la permission',
+      appliedModules: 'Modules concernés',
+      readName: 'Lecture',
+      readDesc: 'Permet de consulter les données du module',
+      writeName: 'Écriture',
+      writeDesc: 'Permet de créer et modifier les données du module',
+      deleteName: 'Suppression',
+      deleteDesc: 'Permet de supprimer les données du module',
+    },
     // Settings
     settings: {
       title: 'Paramètres',
@@ -517,6 +536,25 @@ export const translations = {
       write: 'Write',
       delete: 'Delete',
       close: 'Close',
+    },
+    // Permissions
+    perms: {
+      title: 'Permissions',
+      subtitle: 'View permissions and their associated modules',
+      permName: 'Name',
+      description: 'Description',
+      type: 'Type',
+      modulesCount: 'Modules',
+      createdAt: 'Created at',
+      actions: 'Actions',
+      editPerm: 'Permission details',
+      appliedModules: 'Applied modules',
+      readName: 'Read',
+      readDesc: 'Allows viewing module data',
+      writeName: 'Write',
+      writeDesc: 'Allows creating and modifying module data',
+      deleteName: 'Delete',
+      deleteDesc: 'Allows deleting module data',
     },
     // Settings
     settings: {

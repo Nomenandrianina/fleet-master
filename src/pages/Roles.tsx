@@ -1,5 +1,5 @@
+import { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
   Table,
@@ -9,37 +9,56 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Shield, UserCircle, Eye, Pencil, Trash2, Check, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { Shield, UserCircle, Pencil } from 'lucide-react';
+
+interface RolePermissions {
+  dashboard: { read: boolean; write: boolean; delete: boolean };
+  vehicles: { read: boolean; write: boolean; delete: boolean };
+  users: { read: boolean; write: boolean; delete: boolean };
+  settings: { read: boolean; write: boolean; delete: boolean };
+  roles: { read: boolean; write: boolean; delete: boolean };
+}
 
 const Roles = () => {
   const { t } = useLanguage();
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
 
   const roles = [
     {
       name: t.users.admin,
       key: 'admin',
       description: t.roles.adminDesc,
-      usersCount: '—',
+      createdAt: '2025-01-15',
       permissions: {
         dashboard: { read: true, write: true, delete: true },
         vehicles: { read: true, write: true, delete: true },
         users: { read: true, write: true, delete: true },
         settings: { read: true, write: true, delete: true },
         roles: { read: true, write: true, delete: true },
-      },
+      } as RolePermissions,
     },
     {
       name: t.users.user,
       key: 'user',
       description: t.roles.userDesc,
-      usersCount: '—',
+      createdAt: '2025-01-15',
       permissions: {
         dashboard: { read: true, write: false, delete: false },
         vehicles: { read: true, write: false, delete: false },
         users: { read: false, write: false, delete: false },
         settings: { read: true, write: false, delete: false },
         roles: { read: false, write: false, delete: false },
-      },
+      } as RolePermissions,
     },
   ];
 
@@ -51,12 +70,17 @@ const Roles = () => {
     { key: 'roles', label: t.roles.title },
   ];
 
-  const PermIcon = ({ allowed }: { allowed: boolean }) =>
-    allowed ? (
-      <Check className="w-4 h-4 text-primary" />
-    ) : (
-      <X className="w-4 h-4 text-muted-foreground/40" />
-    );
+  const countPermissions = (perms: RolePermissions) => {
+    let total = 0;
+    Object.values(perms).forEach((mod) => {
+      if (mod.read) total++;
+      if (mod.write) total++;
+      if (mod.delete) total++;
+    });
+    return total;
+  };
+
+  const currentRole = roles.find((r) => r.key === selectedRole);
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -65,91 +89,89 @@ const Roles = () => {
         <p className="text-muted-foreground">{t.roles.subtitle}</p>
       </div>
 
-      {/* Role cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {roles.map((role) => (
-          <Card key={role.key}>
-            <CardContent className="p-5 flex items-start gap-4">
-              <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center shrink-0">
-                {role.key === 'admin' ? (
-                  <Shield className="w-6 h-6 text-primary" />
-                ) : (
-                  <UserCircle className="w-6 h-6 text-primary" />
-                )}
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-lg">{role.name}</h3>
-                  <Badge variant={role.key === 'admin' ? 'default' : 'secondary'}>
-                    {role.key}
-                  </Badge>
-                </div>
-                <p className="text-sm text-muted-foreground">{role.description}</p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+      <div className="rounded-lg border bg-card">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t.roles.roleName}</TableHead>
+              <TableHead>{t.roles.description}</TableHead>
+              <TableHead className="text-center">{t.roles.totalPermissions}</TableHead>
+              <TableHead>{t.roles.createdAt}</TableHead>
+              <TableHead className="text-center">{t.roles.actions}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {roles.map((role) => (
+              <TableRow key={role.key}>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    {role.key === 'admin' ? (
+                      <Shield className="w-4 h-4 text-primary" />
+                    ) : (
+                      <UserCircle className="w-4 h-4 text-primary" />
+                    )}
+                    <span className="font-medium">{role.name}</span>
+                    <Badge variant={role.key === 'admin' ? 'default' : 'secondary'} className="text-xs">
+                      {role.key}
+                    </Badge>
+                  </div>
+                </TableCell>
+                <TableCell className="text-muted-foreground text-sm max-w-xs truncate">
+                  {role.description}
+                </TableCell>
+                <TableCell className="text-center">
+                  <Badge variant="outline">{countPermissions(role.permissions)} / 15</Badge>
+                </TableCell>
+                <TableCell className="text-sm text-muted-foreground">{role.createdAt}</TableCell>
+                <TableCell className="text-center">
+                  <Button variant="ghost" size="icon" onClick={() => setSelectedRole(role.key)}>
+                    <Pencil className="w-4 h-4" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
 
-      {/* Permissions matrix */}
-      <Card>
-        <CardHeader>
-          <CardTitle>{t.roles.permissionsMatrix}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t.roles.module}</TableHead>
-                {roles.map((role) => (
-                  <TableHead key={role.key} colSpan={3} className="text-center">
-                    {role.name}
-                  </TableHead>
-                ))}
-              </TableRow>
-              <TableRow>
-                <TableHead />
-                {roles.map((role) => (
-                  <>
-                    <TableHead key={`${role.key}-r`} className="text-center px-2">
-                      <Eye className="w-4 h-4 mx-auto" />
-                    </TableHead>
-                    <TableHead key={`${role.key}-w`} className="text-center px-2">
-                      <Pencil className="w-4 h-4 mx-auto" />
-                    </TableHead>
-                    <TableHead key={`${role.key}-d`} className="text-center px-2">
-                      <Trash2 className="w-4 h-4 mx-auto" />
-                    </TableHead>
-                  </>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {modules.map((mod) => (
-                <TableRow key={mod.key}>
-                  <TableCell className="font-medium">{mod.label}</TableCell>
-                  {roles.map((role) => {
-                    const perms = role.permissions[mod.key as keyof typeof role.permissions];
-                    return (
-                      <>
-                        <TableCell key={`${role.key}-${mod.key}-r`} className="text-center">
-                          <PermIcon allowed={perms.read} />
-                        </TableCell>
-                        <TableCell key={`${role.key}-${mod.key}-w`} className="text-center">
-                          <PermIcon allowed={perms.write} />
-                        </TableCell>
-                        <TableCell key={`${role.key}-${mod.key}-d`} className="text-center">
-                          <PermIcon allowed={perms.delete} />
-                        </TableCell>
-                      </>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      {/* Modal détail rôle */}
+      <Dialog open={!!selectedRole} onOpenChange={(open) => !open && setSelectedRole(null)}>
+        <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              {currentRole?.key === 'admin' ? (
+                <Shield className="w-5 h-5 text-primary" />
+              ) : (
+                <UserCircle className="w-5 h-5 text-primary" />
+              )}
+              {t.roles.editRole} — {currentRole?.name}
+            </DialogTitle>
+            <DialogDescription>{currentRole?.description}</DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-5 mt-2">
+            {modules.map((mod) => {
+              const perms = currentRole?.permissions[mod.key as keyof RolePermissions];
+              if (!perms) return null;
+              return (
+                <div key={mod.key} className="space-y-3">
+                  <h4 className="font-semibold text-sm">{mod.label}</h4>
+                  <div className="grid grid-cols-1 gap-2 pl-2">
+                    {(['read', 'write', 'delete'] as const).map((perm) => (
+                      <div key={perm} className="flex items-center justify-between py-1">
+                        <Label className="text-sm text-muted-foreground">
+                          {t.roles[perm === 'delete' ? 'delete' : perm]}
+                        </Label>
+                        <Switch checked={perms[perm]} disabled />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

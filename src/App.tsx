@@ -13,6 +13,7 @@ import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
 import Users from "./pages/Users";
 import Roles from "./pages/Roles";
+import Permissions from "./pages/Permissions";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
@@ -45,6 +46,7 @@ const AppRoutes = () => (
       <Route path="/settings" element={<Settings />} />
       <Route path="/users" element={<Users />} />
       <Route path="/roles" element={<Roles />} />
+      <Route path="/permissions" element={<Permissions />} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>

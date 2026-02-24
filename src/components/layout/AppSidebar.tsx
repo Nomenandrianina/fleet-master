@@ -1,4 +1,4 @@
-import { LayoutDashboard, Car, Settings, LogOut, UserCircle, Users, ChevronDown } from 'lucide-react';
+import { LayoutDashboard, Car, Settings, LogOut, UserCircle, Users, ChevronDown, Shield } from 'lucide-react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -26,7 +26,7 @@ export function AppSidebar() {
   const navigate = useNavigate();
   const { signOut } = useAuth();
   const [adminOpen, setAdminOpen] = useState(
-    location.pathname === '/users'
+    location.pathname === '/users' || location.pathname === '/roles'
   );
 
   const handleLogout = async () => {
@@ -43,6 +43,7 @@ export function AppSidebar() {
 
   const adminSubItems = [
     { title: t.users.title, url: '/users', icon: Users },
+    { title: t.roles.title, url: '/roles', icon: Shield },
   ];
 
   return (

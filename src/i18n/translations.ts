@@ -232,6 +232,15 @@ export const translations = {
       user: 'Utilisateur',
       permissions: 'Permissions',
     },
+    // Roles
+    roles: {
+      title: 'Rôles',
+      subtitle: 'Consulter les rôles et leurs permissions',
+      adminDesc: 'Accès complet à toutes les fonctionnalités du système',
+      userDesc: 'Accès en lecture seule aux données de base',
+      permissionsMatrix: 'Matrice des permissions',
+      module: 'Module',
+    },
     // Settings
     settings: {
       title: 'Paramètres',
@@ -477,6 +486,15 @@ export const translations = {
       admin: 'Administrator',
       user: 'User',
       permissions: 'Permissions',
+    },
+    // Roles
+    roles: {
+      title: 'Roles',
+      subtitle: 'View roles and their permissions',
+      adminDesc: 'Full access to all system features',
+      userDesc: 'Read-only access to basic data',
+      permissionsMatrix: 'Permissions matrix',
+      module: 'Module',
     },
     // Settings
     settings: {
